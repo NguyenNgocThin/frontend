@@ -3,7 +3,7 @@ Cách chạy chương trình :
 Clone dự án
 
 
-* Khởi chạy FrontEnd ( sử dụng Nodejs 14 hoặc hơn)
+* Khởi chạy FrontEnd ( sử dụng Nodejs 14 hoặc hơn. Link : https://nodejs.org/dist/v14.17.3/node-v14.17.3-x64.msi)
 
 - Bước 1 :
 
