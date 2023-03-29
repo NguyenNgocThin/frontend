@@ -1,67 +1,244 @@
+import * as React from 'react';
 import PropTypes from 'prop-types';
-import React from 'react';
+import './App.css';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import {
+    GridRowModes,
+    DataGridPro,
+    GridToolbarContainer,
+    GridActionsCellItem,
+} from '@mui/x-data-grid-pro';
+import {
+    randomCreatedDate,
+    randomTraderName,
+    randomUpdatedDate,
+    randomId,
+    randomInt,
+    randomQuantity,
+    randomUserName,
+    randomStatusOptions,
+    randomEmail,
+    randomAddress,
+} from '@mui/x-data-grid-generator';
+import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
 
-// material-ui
-import { useTheme } from '@material-ui/styles';
-import { Box, Card, Grid, Typography } from '@material-ui/core';
+const initialRows = [
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        mota: randomAddress(),
+        status: 'Active',
+        dateCreated: randomCreatedDate(),
+    },
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        mota: randomAddress(),
+        status: 'Active',
+        dateCreated: randomCreatedDate(),
+    },
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        mota: randomAddress(),
+        status: 'Active',
+        dateCreated: randomCreatedDate(),
+    },
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        role: 'User',
+        mota: randomAddress(),
+        status: 'Suspended',
+        dateCreated: randomCreatedDate(),
+    },
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        role: 'User',
+        mota: randomAddress(),
+        status: 'Active',
+        dateCreated: randomCreatedDate(),
+    },
+    {
+        id: randomQuantity(),
+        idkh: randomQuantity(),
+        ngaysx: '10/10/2010',
+        role: 'User',
+        mota: randomAddress(),
+        status: 'Active',
+        dateCreated: randomCreatedDate(),
+    },
+];
 
-// project imports
-import SubCard from '../../ui-component/cards/SubCard';
-import MainCard from '../../ui-component/cards/MainCard';
-import SecondaryAction from '../../ui-component/cards/CardSecondaryAction';
-import { gridSpacing } from '../../store/constant';
+function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
 
-//===============================|| COLOR BOX ||===============================//
+    const handleClick = () => {
+    };
 
-const ColorBox = ({ bgcolor, title, data, dark }) => (
-    <>
-        <Card sx={{ mb: 3 }}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    py: 4.5,
-                    bgcolor,
-                    color: dark ? 'grey.800' : '#ffffff'
-                }}
-            >
-                {title && (
-                    <Typography variant="subtitle1" color="inherit">
-                        {title}
-                    </Typography>
-                )}
-                {!title && <Box sx={{ p: 1.15 }} />}
-            </Box>
-        </Card>
-        {data && (
-            <Grid container justifyContent="space-between" alignItems="center">
-                <Grid item>
-                    <Typography variant="subtitle2">{data.label}</Typography>
-                </Grid>
-                <Grid item>
-                    <Typography variant="subtitle1" sx={{ textTransform: 'uppercase' }}>
-                        {data.color}
-                    </Typography>
-                </Grid>
-            </Grid>
-        )}
-    </>
-);
+    return (
+        <GridToolbarContainer>
+            <Button color="primary" >
+                Thêm Điện kế
+            </Button>
+        </GridToolbarContainer>
+    );
+}
 
-ColorBox.propTypes = {
-    bgcolor: PropTypes.string,
-    title: PropTypes.string,
-    data: PropTypes.object.isRequired,
-    dark: PropTypes.bool
+EditToolbar.propTypes = {
+    setRowModesModel: PropTypes.func.isRequired,
+    setRows: PropTypes.func.isRequired,
 };
 
-// ===============================|| UI COLOR ||=============================== //
+export default function FullFeaturedCrudGrid() {
+    const [rows, setRows] = React.useState(initialRows);
+    const [rowModesModel, setRowModesModel] = React.useState({});
 
-const UIColor = () => (
-    <MainCard title="Quản lý điện kế">
-        <Grid container spacing={gridSpacing}></Grid>
-    </MainCard>
-);
+    const handleRowEditStart = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
 
-export default UIColor;
+    const handleRowEditStop = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleEditClick = (id) => () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    };
+
+    const handleSaveClick = (id) => () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+
+    const handleDeleteClick = (id) => () => {
+        setRows(rows.filter((row) => row.id !== id));
+    };
+
+    const handleCancelClick = (id) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+        });
+
+        const editedRow = rows.find((row) => row.id === id);
+        if (editedRow.isNew) {
+            setRows(rows.filter((row) => row.id !== id));
+        }
+    };
+
+    const processRowUpdate = (newRow) => {
+        const updatedRow = { ...newRow, isNew: false };
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        return updatedRow;
+    };
+
+    const handleRowModesModelChange = (newRowModesModel) => {
+        setRowModesModel(newRowModesModel);
+    };
+
+    const columns = [
+        { field: 'id', headerName: 'Mã điện kế', width: 145, editable: false },
+        { field: 'idkh', headerName: 'Mã khách hàng', width: 145, editable: false },
+        {
+            field: 'ngaysx',
+            headerName: 'Ngày sản xuất',
+            width: 140,
+            editable: false,
+        },
+        {
+            field: 'dateCreated',
+            headerName: 'Ngày tạo',
+            type: 'date',
+            width: 140,
+            editable: false,
+        },
+        { field: 'mota', headerName: 'Mô tả', width: 200, editable: true },
+        { field: 'status', headerName: 'Trạng thái', width: 150, editable: true },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Tác vụ',
+            width: 100,
+            cellClassName: 'actions',
+            getActions: ({ id }) => {
+                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+                if (isInEditMode) {
+                    return [
+                        <GridActionsCellItem
+                            icon={<SaveIcon />}
+                            label="Save"
+                            onClick={handleSaveClick(id)}
+                        />,
+                        <GridActionsCellItem
+                            icon={<CancelIcon />}
+                            label="Cancel"
+                            className="textPrimary"
+                            onClick={handleCancelClick(id)}
+                            color="inherit"
+                        />,
+                    ];
+                }
+
+                return [
+                    <GridActionsCellItem
+                        icon={<EditIcon />}
+                        label="Edit"
+                        className="textPrimary"
+                        onClick={handleEditClick(id)}
+                        color="inherit"
+                    />,
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={handleDeleteClick(id)}
+                        color="inherit"
+                    />,
+                ];
+            },
+        },
+    ];
+
+    return (
+        <Box
+            sx={{
+                height: 500,
+                width: '100%',
+                '& .actions': {
+                    color: 'text.secondary',
+                },
+                '& .textPrimary': {
+                    color: 'text.primary',
+                },
+            }}
+        >
+            <DataGridPro
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStart={handleRowEditStart}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                slots={{
+                    toolbar: EditToolbar,
+                }}
+                slotProps={{
+                    toolbar: { setRows, setRowModesModel },
+                }}
+            />
+        </Box>
+    );
+}

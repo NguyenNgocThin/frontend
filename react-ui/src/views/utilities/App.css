@@ -1,0 +1,7 @@
+.MuiDataGrid-main>div:nth-child(3){
+    color: blue;
+    display: none;
+}
+element.style{
+    display: none;
+}
