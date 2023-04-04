@@ -7,6 +7,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
 import {
     GridRowModes,
     DataGridPro,
@@ -26,7 +37,18 @@ import {
     randomAddress,
 } from '@mui/x-data-grid-generator';
 import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
-
+import { border } from '@material-ui/system';
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 const initialRows = [
     {
         id: randomQuantity(),
@@ -77,18 +99,77 @@ const initialRows = [
         bac: '5',
     },
 ];
-
+const options = ['Bậc 1', 'Bậc 2', 'Bậc 3', 'Bậc 4', 'Bậc 5'];
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [value, setValue] = React.useState(dayjs('2023-04-04'));
 
+    const [value1, setValue1] = React.useState(options[0]);
+    const [inputValue1, setInputValue1] = React.useState('');
     const handleClick = () => {
     };
 
     return (
         <GridToolbarContainer>
-            <Button color="primary" >
-                Thêm Hoá đơn
-            </Button>
+            <Button onClick={handleOpen}>Thêm Hóa đơn</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h3" component="h2" textAlign={'center'}>
+                        Nhập thông tin hóa đơn mới
+                    </Typography>
+                    <TextField variant='outlined' label="Mã hóa đơn" name="mahd" sx={{ marginTop: 2, height: 60, width: '100%' }} />
+                    <TextField variant='outlined' label="Kỳ" name="ky" sx={{ height: 60, width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ height: 60, width: '100%' }}>
+                        <DemoContainer components={['DatePicker', 'DatePicker']}>
+                            <DatePicker
+                                label="Từ ngày"
+                                value={value}
+                                onChange={(newValue) => setValue(newValue)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ height: 60, width: '100%' }}>
+                        <DemoContainer components={['DatePicker', 'DatePicker']}>
+                            <DatePicker
+                                label="Đến ngày"
+                                value={value}
+                                onChange={(newValue) => setValue(newValue)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
+                    <TextField variant='outlined' label="Chỉ số đầu" name="chisodau" sx={{ marginTop: 2, width: '100%' }} />
+
+
+                    {/* <div sx={{height: 60,width: '100%'}}>
+                    <br />
+                    <Autocomplete
+                        value={value1}
+                        onChange={(event, newValue) => {
+                        setValue(newValue);
+                        }}
+                        inputValue={inputValue1}
+                        onInputChange={(event, newInputValue1) => {
+                        setInputValue1(newInputValue1);
+                        }}
+                        id="controllable-states-demo"
+                        options={options}
+                        sx={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Bậc" />}
+                    />
+                </div> */}
+
+                    <Button onClick={handleClose} sx={{ marginTop: '2rem', marginLeft: '25%', height: 50, width: '50%', bgcolor: '#ede7f6', border: '1px solid #000' }}>Thêm</Button>
+                </Box>
+            </Modal>
         </GridToolbarContainer>
     );
 }

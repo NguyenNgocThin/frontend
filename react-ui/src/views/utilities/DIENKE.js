@@ -7,6 +7,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+
+import Switch from '@mui/material/Switch';
 import {
     GridRowModes,
     DataGridPro,
@@ -26,7 +36,19 @@ import {
     randomAddress,
 } from '@mui/x-data-grid-generator';
 import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
+import { Paper, TextField } from '@mui/material';
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 const initialRows = [
     {
         id: randomQuantity(),
@@ -83,15 +105,63 @@ const initialRows = [
 
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
-
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [value, setValue] = React.useState(dayjs('2023-04-04'));
+    const [checked, setChecked] = React.useState(true);
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
     const handleClick = () => {
     };
 
     return (
         <GridToolbarContainer>
-            <Button color="primary" >
-                Thêm Điện kế
-            </Button>
+            <Button onClick={handleOpen}>Thêm Điện Kế</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h3" component="h2" textAlign={'center'}>
+                        Nhập thông tin điện kế mới
+                    </Typography>
+
+                    <TextField variant='outlined' label="Mã Điện Kế" name="madk" sx={{ marginTop: 2, height: 60, width: '100%' }} />
+                    <TextField variant='outlined' label="Mã Khách Hàng" name="makh" sx={{ height: 60, width: '100%' }} />
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ height: 60, width: '100%' }}>
+                        <DemoContainer components={['DatePicker', 'DatePicker']}>
+                            <DatePicker
+                                label="Ngày sản xuất"
+                                value={value}
+                                onChange={(newValue) => setValue(newValue)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ height: 60, width: '100%' }}>
+                        <DemoContainer components={['DatePicker', 'DatePicker']}>
+                            <DatePicker
+                                label="Ngày tạo"
+                                value={value}
+                                onChange={(newValue) => setValue(newValue)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
+                    <TextField variant='outlined' label="Mô tả" name="mota" sx={{ height: 60, width: '100%', marginTop: 2 }} />
+                    <text>Trạng thái hoạt động</text>
+                    <Switch
+                        checked={checked}
+                        onChange={handleChange}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <Button onClick={handleClose} sx={{ marginTop: '2rem', marginLeft: '25%', height: 50, width: '50%', bgcolor: '#ede7f6', border: '1px solid #000' }}>Thêm</Button>
+                </Box>
+            </Modal>
         </GridToolbarContainer>
     );
 }

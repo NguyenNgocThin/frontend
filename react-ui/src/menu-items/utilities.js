@@ -58,18 +58,32 @@ const utilities = {
             children: [
                 {
                     id: 'banggiamoi',
-                    title: 'Bảng Giá Điện Mới',
+                    title: 'Các ngành sản xuất',
                     type: 'item',
-                    url: '/icons/banggiamoi',
+                    url: '/icons/banggiasanxuat',
                     breadcrumbs: false
                 },
                 {
                     id: 'banggiacu',
-                    title: 'Bảng Giá Điện Cũ',
+                    title: 'Khối hành chính',
                     type: 'item',
-                    url: '/icons/banggiacu',
+                    url: '/icons/banggiahanhchinh',
                     breadcrumbs: false
-                }
+                },
+                {
+                    id: 'banggiakinhdoanh',
+                    title: 'Kinh doanh',
+                    type: 'item',
+                    url: '/icons/banggiakinhdoanh',
+                    breadcrumbs: false
+                },
+                {
+                    id: 'banggiasinhhoat',
+                    title: 'Sinh hoạt',
+                    type: 'item',
+                    url: '/icons/banggiasinhhoat',
+                    breadcrumbs: false
+                },
             ]
         },
         {
