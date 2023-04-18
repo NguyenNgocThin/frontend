@@ -10,6 +10,7 @@
     "dependencies": {
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
+        "@jridgewell/gen-mapping": "^0.3.3",
         "@material-ui/core": "^5.0.0-beta.0",
         "@material-ui/data-grid": "^4.0.0-alpha.33",
         "@material-ui/icons": "^5.0.0-beta.0",
@@ -30,6 +31,7 @@
         "apexcharts": "^3.26.1",
         "axios": "^0.21.1",
         "clsx": "^1.1.1",
+        "cors": "^2.8.5",
         "formik": "^2.2.6",
         "framer-motion": "^4.1.13",
         "material-ui-popup-state": "^1.8.0",
@@ -69,6 +71,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/helper-environment-visitor": "^7.18.9",
         "@material-ui/codemod": "^5.0.0-alpha.35",
         "sass": "^1.32.11"
     }
