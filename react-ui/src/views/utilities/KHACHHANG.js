@@ -39,99 +39,13 @@ const style = {
     p: 4,
 };
 
-// const data=[];
+
 var request = require('request');
-// var optionslogin = {
-//   'method': 'POST',
-//   'url': 'https://44.193.210.107/api/v1/auth/login',
-//   'headers': {
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify({
-//     "username": "root",
-//     "password": "root"
-//   })
 
-// };
-// request(optionslogin, function (error, response) {
-//   if (error) throw new Error(error);
 
-//         const token=JSON.parse(response.body);
 
-//         var optionss = {
-//         'method': 'GET',
-//         'url': 'https://44.193.210.107/api/v1/khachhang',
-//         'headers': {
-//             'Authorization': 'Bearer '+token.access_token
-//         }
-//         };
-//         request(optionss, function (error, response) {
-//         if (error) throw new Error(error);
-//         const data=JSON.parse(response.body);
-//         console.log(data.data);
-//         });
-// });
-// const [initialRows, setRows] = React.useState(data);
 
-const initialRows = [
-    {
-        id: 1,
-        name: "Nguyen Van A",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 2,
-        name: "Nguyen Van B",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 3,
-        name: "Nguyen Van C",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 4,
-        name: "Nguyen Van D",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 5,
-        name: "Nguyen Van E",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 6,
-        name: "Nguyen Van G",
-        sdt: "0966220566",
-        cccd: "158496543",
-        address: "Cao Lo"
-        // dateCreated: randomCreatedDate(),
-        // lastLogin: randomUpdatedDate(),
-    },
-
-];
-
-const options = ['Bậc 1', 'Bậc 2', 'Bậc 3', 'Bậc 4', 'Bậc 5'];
+// const options = ['Bậc 1', 'Bậc 2', 'Bậc 3', 'Bậc 4', 'Bậc 5'];
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
     const [open, setOpen] = React.useState(false);
@@ -140,7 +54,7 @@ function EditToolbar(props) {
    
     // const [value, setValue] = React.useState(dayjs('2023-04-04'));
 
-    const [value1, setValue1] = React.useState(options[0]);
+    // const [value1, setValue1] = React.useState(options[0]);
     const [inputValue1, setInputValue1] = React.useState('');
     const handleClick = () => {
     };
@@ -151,11 +65,7 @@ function EditToolbar(props) {
        var dia_chi=document.getElementById("dia_chi").value;
        var dt=document.getElementById("dt").value;
        var cmnd=document.getElementById("cmnd").value;
-       console.log("ma kh",ma_kh);
-       console.log("ten_kh",ten_kh);
-       console.log("dia_chi",dia_chi);
-       console.log("dt",dt);
-       console.log("cmnd",cmnd);
+   
 
     var request = require('request');
       var optionslogin = {
@@ -254,7 +164,7 @@ export default function FullFeaturedCrudGrid() {
       request(optionslogin, function (error, response) {
         if (error) throw new Error(error);
         const token=JSON.parse(response.body);
-  
+ //gọi api 
         var optionss = {
           'method': 'GET',
           'url': 'https://44.193.210.107/api/v1/khachhang',
@@ -276,9 +186,10 @@ export default function FullFeaturedCrudGrid() {
       fetchDataFromServer();
     }, []);
   
-    
+    const [updatedRowId, setUpdatedRowId] = React.useState(null);
+    const [updatedRow, setUpdatedRow] = React.useState({});
     const [rowModesModel, setRowModesModel] = React.useState({});
-
+    // const [rowss, setRowss] = React.useState([]);
     const handleRowEditStart = (params, event) => {
         event.defaultMuiPrevented = true;
     };
@@ -289,18 +200,76 @@ export default function FullFeaturedCrudGrid() {
 
     const handleEditClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-        console.log(rowModesModel);
     };
 
     const handleSaveClick = (id) => () => {
-        
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-        // console.log(rowModesModel[id]);
-//   const updatedRow = rows.find(row => row.id === id);
-//   setUpdatedRows([...updatedRows, updatedRow]);
-// console.log(updatedRow);
+        const updatedRow = rows.find((row) => row.id === id);
+        setUpdatedRow(updatedRow);
+        setUpdatedRowId(id);
+        setRows((prevRows) => {
+            const index = prevRows.findIndex((row) => row.id === id);
+            const newRows = [...prevRows];
+            newRows[index] = updatedRow;
+            return newRows;
+        });
 
     };
+    React.useEffect(() => {
+        const foundRow = rows.find((row) => row.id === updatedRowId);
+        // console.log(updatedRow.id);
+        // console.log(foundRow.id);
+        
+        if (foundRow) {
+            if(updatedRow.id!==foundRow.id||
+                updatedRow.ma_kh!==foundRow.ma_kh||
+                updatedRow.ten_kh!==foundRow.ten_kh||
+                updatedRow.dia_chi!==foundRow.dia_chi||
+                updatedRow.dt!==foundRow.dt||
+                updatedRow.cmnd!==foundRow.cmnd
+                ){
+            console.log(foundRow);
+            var request = require('request');
+            var optionslogin = {
+              'method': 'POST',
+              'url': 'https://44.193.210.107/api/v1/auth/login',
+              'headers': {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                "username": "root",
+                "password": "root"
+              })
+            };
+        
+            request(optionslogin, function (error, response) {
+              if (error) throw new Error(error);
+              const token=JSON.parse(response.body);
+              var request = require('request');
+                  var options = {
+                'method': 'PUT',
+                'url': 'https://44.193.210.107/api/v1/khachhang/update',
+                  'headers': {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token.access_token
+                  },
+                  body: JSON.stringify({
+                    "id": foundRow.id,
+                    "ma_kh": foundRow.ma_kh,
+                    "ten_kh": foundRow.ten_kh,
+                    "dia_chi": foundRow.dia_chi,
+                    "dt": foundRow.dt,
+                    "cmnd":foundRow.cmnd
+                  })
+                  };
+              request(options, function (error, response) {
+              if (error) throw new Error(error);
+              console.log(response.body);
+              });
+            });
+        }
+        }
+    }, [rows, updatedRowId]);
     
     const handleDeleteClick = (id) => () => {
         console.log(id);

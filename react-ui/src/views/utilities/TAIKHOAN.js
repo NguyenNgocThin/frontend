@@ -75,83 +75,6 @@ const initialRows = [
         dateCreated: randomCreatedDate(),
         lastLogin: randomUpdatedDate(),
     },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 19,
-        role: 'Admin',
-        status: 'Active',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 28,
-        role: 'User',
-        status: 'Active',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 23,
-        role: 'User',
-        status: 'Suspended',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 23,
-        role: 'User',
-        status: 'Active',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 28,
-        role: 'User',
-        status: 'Suspended',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 22,
-        role: 'User',
-        status: 'Active',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: randomQuantity(),
-        username: randomUserName(),
-        name: randomTraderName(),
-        mail: randomEmail(),
-        age: 25,
-        role: 'User',
-        status: 'Active',
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
 ];
 
 function EditToolbar(props) {
@@ -166,6 +89,54 @@ function EditToolbar(props) {
     };
     const handleClick = () => {
     };
+
+    const Add = () => {
+     
+        var ma_kh=document.getElementById("ma_kh").value;
+        var ten_kh=document.getElementById("ten_kh").value;
+        var dia_chi=document.getElementById("dia_chi").value;
+        var dt=document.getElementById("dt").value;
+        var cmnd=document.getElementById("cmnd").value;
+
+    var request = require('request');
+      var optionslogin = {
+        'method': 'POST',
+        'url': 'https://44.193.210.107/api/v1/auth/login',
+        'headers': {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "username": "root",
+          "password": "root"
+        })
+      };
+
+      request(optionslogin, function (error, response) {
+        if (error) throw new Error(error);
+        const token=JSON.parse(response.body);
+        var options = {
+            'method': 'POST',
+            'url': 'https://44.193.210.107/api/v1/taikhoan/add',
+            'headers': {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+token.access_token
+            },
+            body: JSON.stringify({
+              "ma_kh":ma_kh,
+              "ten_kh":ten_kh,
+              "dia_chi":dia_chi,
+              "dt":dt,
+              "cmnd":cmnd
+            })
+          
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            console.log(response.body);
+          });
+        
+      });
+        setOpen(false)};
 
     return (
         <GridToolbarContainer>
